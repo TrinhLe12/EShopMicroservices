@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.CQRS;
-using CatalogAPI.Model;
+﻿using Marten.Internal.Sessions;
 
 namespace CatalogAPI.Products.CreateProduct
 {
@@ -8,7 +7,11 @@ namespace CatalogAPI.Products.CreateProduct
 
     public record CreateProductResult(Guid Id);
 
-    public class CreateProductHandler : ICommandHandler<CreateProductCommand, CreateProductResult>
+    /// <summary>
+    /// Marten acts like an abstract repository --> inject directly to handler, no need to wrap in another abtract repository layer
+    /// </summary>
+    /// <param name="session"></param>
+    internal class CreateProductHandler(IDocumentSession session) : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
@@ -23,10 +26,11 @@ namespace CatalogAPI.Products.CreateProduct
             };
 
             //Save to datatbase
-
+            session.Store(product);
+            await session.SaveChangesAsync(cancellationToken);
 
             //Return CreateProductResult result
-            return new CreateProductResult(Guid.NewGuid());
+            return new CreateProductResult(product.Id);
         }
     }
 }
