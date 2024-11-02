@@ -21,13 +21,11 @@
     /// </summary>
     /// <param name="session"></param>
     internal class CreateProductHandler
-        (IDocumentSession session, ILogger<CreateProductHandler> logger) 
+        (IDocumentSession session) 
         : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
-            logger.LogInformation("CreateProductHandler.Handle called with {@command}", command);
-
             //Create product entity from command object
             var product = new Product
             {
