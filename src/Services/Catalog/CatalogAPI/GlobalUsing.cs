@@ -7,3 +7,5 @@ global using Marten;
 global using CatalogAPI.Exceptions;
 global using FluentValidation;
 global using BuildingBlocks.Behaviors;
+global using BuildingBlocks.Constants;
+global using Marten.Pagination;
