@@ -1,6 +1,3 @@
-using BuildingBlocks.Exceptions.Handler;
-using CatalogAPI.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
 //Add services
@@ -28,11 +25,20 @@ if (builder.Environment.IsDevelopment())
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
+
 var app = builder.Build();
 
 //Config pipeline
 app.MapCarter();
 
 app.UseExceptionHandler(option => { });
+
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.Run();
