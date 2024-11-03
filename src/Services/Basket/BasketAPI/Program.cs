@@ -1,3 +1,6 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Add services
@@ -19,6 +22,8 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddMarten(opts =>
 {
     opts.Connection(builder.Configuration.GetConnectionString("Database")!);
+    //Use usernam as id for shopping cart
+    opts.Schema.For<ShoppingCart>().Identity(x => x.UserName);
     if (isDevelopment)
     {
         opts.AutoCreateSchemaObjects = Weasel.Core.AutoCreate.CreateOrUpdate;
@@ -29,15 +34,20 @@ builder.Services.AddMarten(opts =>
     }
 }).UseLightweightSessions();
 
-if (isDevelopment)
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.Decorate<IBasketRepository, CacheBasketRepository>();
+
+builder.Services.AddStackExchangeRedisCache(options =>
 {
-    builder.Services.InitializeMartenWith<CatalogInitialData>();
-}
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    //options.InstanceName = "Basket";
+});
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 builder.Services.AddHealthChecks()
-    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
+    .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
 
 var app = builder.Build();
 
