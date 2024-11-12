@@ -55,6 +55,8 @@ services:
       #This will override connection string in appsetting, need keep __ in var name
       - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres;Include Error Detail=true
       - ConnectionStrings__Redis=distributedcache:6379
+      #Address inside Docker Container
+      - GrpcSettings__DiscountUrl=https://discountgrpc:8081
     depends_on:
       - basketdb
       - distributedcache
