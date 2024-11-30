@@ -6,6 +6,9 @@ namespace CatalogAPI.Data
     {
         public async Task Populate(IDocumentStore store, CancellationToken cancellationToken)
         {
+            //Scoped Dependency: Most DI containers treat IDocumentSession as a scoped service, meaning it’s only available within the lifetime of a single request or operation.
+            //Attempting to resolve it outside this context (e.g., during application startup) could fail or result in an invalid session.
+            //--> need isolated session
             using var session = store.LightweightSession();
 
             var dataExist = await session.Query<Product>().AnyAsync();

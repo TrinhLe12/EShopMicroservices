@@ -31,6 +31,16 @@ services:
     ports:
       - "6379:6379"
 
+  orderdb:
+    container_name: orderdb
+    environment:
+      - ACCEPT_EULA=Y
+      #Account sa on local host maight be disabled or window authen only, check sql server setting if connect fail
+      - SA_PASSWORD=SwN12345678
+    restart: always
+    ports:
+      - "1433:1433"
+
   catalogapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
