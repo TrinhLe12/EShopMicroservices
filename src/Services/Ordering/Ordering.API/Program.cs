@@ -20,6 +20,8 @@ var app = builder.Build();
 
 #region Register services into application pipeline
 
+app.UseApiServices();
+
 if (app.Environment.IsDevelopment())
 {
     //Auto migrate changes and seed data on start up
