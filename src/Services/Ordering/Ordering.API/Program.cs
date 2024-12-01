@@ -9,10 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Services are registered in this order, pay attention to order
 builder.Services
-    .AddApiServices()
     .AddApplicationServices()
-    .AddInfrastructureServices(builder.Configuration);
-    
+    .AddInfrastructureServices(builder.Configuration)
+    .AddApiServices(builder.Configuration);
+
 
 #endregion Add services to the container
 
