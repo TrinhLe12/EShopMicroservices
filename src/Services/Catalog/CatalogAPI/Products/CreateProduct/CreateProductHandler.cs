@@ -1,5 +1,7 @@
 ﻿namespace CatalogAPI.Products.CreateProduct
 {
+    #region Set up command
+    
     public record CreateProductCommand(string Name, List<string> Category, string Description, string ImageFile, decimal Price)
         : ICommand<CreateProductResult>;
 
@@ -15,6 +17,10 @@
             RuleFor(x => x.Price).GreaterThan(0).WithMessage("Price must be greater than 0");
         }
     }
+
+    #endregion Set up command
+
+    #region Command handler
 
     /// <summary>
     /// Marten acts like an abstract repository --> inject directly to handler, no need to wrap in another abtract repository layer
@@ -44,4 +50,6 @@
             return new CreateProductResult(product.Id);
         }
     }
+
+    #endregion Command handler
 }

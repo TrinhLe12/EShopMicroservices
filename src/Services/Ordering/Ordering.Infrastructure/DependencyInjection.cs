@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ordering.Application.Data;
 
 namespace Ordering.Infrastructure
 {
@@ -22,7 +23,8 @@ namespace Ordering.Infrastructure
                 options.UseSqlServer(connectionString);
             });
 
-            //services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+            //Register ApplicationDbContext as implementation of IApplicationDbContext --> allow DI in application layer
+            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
             return services;
         }
