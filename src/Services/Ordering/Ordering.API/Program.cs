@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Services are registered in this order, pay attention to order
 builder.Services
-    .AddApplicationServices()
+    .AddApplicationServices(builder.Configuration)
     .AddInfrastructureServices(builder.Configuration)
     .AddApiServices(builder.Configuration);
 
