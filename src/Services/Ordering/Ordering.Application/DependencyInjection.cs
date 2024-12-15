@@ -18,6 +18,8 @@ namespace Ordering.Application
                 config.AddOpenBehavior(typeof(LoggingBehavior<,>));
             });
 
+            //Register feature management
+            services.AddFeatureManagement();
             //Register Message broker 
             services.AddMessageBroker(configuration, Assembly.GetExecutingAssembly());
 
